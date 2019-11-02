@@ -89,20 +89,25 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 try
                 {
-                    bo.Alterar(new Cliente()
+                    if (IsCpf(model.CPF))
                     {
-                        Id = model.Id,
-                        CEP = model.CEP,
-                        Cidade = model.Cidade,
-                        Email = model.Email,
-                        Estado = model.Estado,
-                        Logradouro = model.Logradouro,
-                        Nacionalidade = model.Nacionalidade,
-                        Nome = model.Nome,
-                        Sobrenome = model.Sobrenome,
-                        CPF = model.CPF,
-                        Telefone = model.Telefone
-                    });
+                        bo.Alterar(new Cliente()
+                        {
+                            Id = model.Id,
+                            CEP = model.CEP,
+                            Cidade = model.Cidade,
+                            Email = model.Email,
+                            Estado = model.Estado,
+                            Logradouro = model.Logradouro,
+                            Nacionalidade = model.Nacionalidade,
+                            Nome = model.Nome,
+                            Sobrenome = model.Sobrenome,
+                            CPF = model.CPF,
+                            Telefone = model.Telefone
+                        });
+                    }
+                    else
+                        throw new Exception("CPF Inválido");
                 }
                 catch (Exception ex)
                 {
