@@ -49,6 +49,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = model.Nacionalidade,
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
+                    CPF = model.CPF,
                     Telefone = model.Telefone
                 });
 
@@ -84,6 +85,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = model.Nacionalidade,
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
+                    CPF = model.CPF,
                     Telefone = model.Telefone
                 });
                                
@@ -111,6 +113,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = cliente.Nacionalidade,
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
+                    CPF = cliente.CPF,
                     Telefone = cliente.Telefone
                 };
 
