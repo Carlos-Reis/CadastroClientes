@@ -38,22 +38,35 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                
-                model.Id = bo.Incluir(new Cliente()
-                {                    
-                    CEP = model.CEP,
-                    Cidade = model.Cidade,
-                    Email = model.Email,
-                    Estado = model.Estado,
-                    Logradouro = model.Logradouro,
-                    Nacionalidade = model.Nacionalidade,
-                    Nome = model.Nome,
-                    Sobrenome = model.Sobrenome,
-                    CPF = model.CPF,
-                    Telefone = model.Telefone
-                });
+                try
+                {
+                    if (IsCpf(model.CPF))
+                    {
+                        model.Id = bo.Incluir(new Cliente()
+                        {
+                            CEP = model.CEP,
+                            Cidade = model.Cidade,
+                            Email = model.Email,
+                            Estado = model.Estado,
+                            Logradouro = model.Logradouro,
+                            Nacionalidade = model.Nacionalidade,
+                            Nome = model.Nome,
+                            Sobrenome = model.Sobrenome,
+                            CPF = model.CPF,
+                            Telefone = model.Telefone
+                        });
+                    }
+                    else
+                        throw new Exception("CPF Inválido");
+                }
+                catch (Exception ex)
+                {
+                    List<string> erros = new List<string>();
+                    erros.Add(ex.Message);
+                    Response.StatusCode = 400;
+                    return Json(string.Join(Environment.NewLine, erros));
+                }
 
-           
                 return Json("Cadastro efetuado com sucesso");
             }
         }
@@ -74,21 +87,31 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                bo.Alterar(new Cliente()
+                try
                 {
-                    Id = model.Id,
-                    CEP = model.CEP,
-                    Cidade = model.Cidade,
-                    Email = model.Email,
-                    Estado = model.Estado,
-                    Logradouro = model.Logradouro,
-                    Nacionalidade = model.Nacionalidade,
-                    Nome = model.Nome,
-                    Sobrenome = model.Sobrenome,
-                    CPF = model.CPF,
-                    Telefone = model.Telefone
-                });
-                               
+                    bo.Alterar(new Cliente()
+                    {
+                        Id = model.Id,
+                        CEP = model.CEP,
+                        Cidade = model.Cidade,
+                        Email = model.Email,
+                        Estado = model.Estado,
+                        Logradouro = model.Logradouro,
+                        Nacionalidade = model.Nacionalidade,
+                        Nome = model.Nome,
+                        Sobrenome = model.Sobrenome,
+                        CPF = model.CPF,
+                        Telefone = model.Telefone
+                    });
+                }
+                catch (Exception ex)
+                {
+                    List<string> erros = new List<string>();
+                    erros.Add(ex.Message);
+                    Response.StatusCode = 400;
+                    return Json(string.Join(Environment.NewLine, erros));
+                }
+
                 return Json("Cadastro alterado com sucesso");
             }
         }
@@ -148,6 +171,52 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
+        }
+
+        public static bool IsCpf(string cpf)
+        {
+            int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            string tempCpf;
+            string digito;
+            int soma;
+            int resto;
+
+            cpf = cpf.Trim();
+            cpf = cpf.Replace(".", "").Replace("-", "");
+
+            if (cpf.Length != 11)
+                return false;
+
+            tempCpf = cpf.Substring(0, 9);
+            soma = 0;
+
+            for (int i = 0; i < 9; i++)
+                soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
+
+            resto = soma % 11;
+            if (resto < 2)
+                resto = 0;
+            else
+                resto = 11 - resto;
+
+            digito = resto.ToString();
+
+            tempCpf = tempCpf + digito;
+
+            soma = 0;
+            for (int i = 0; i < 10; i++)
+                soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
+
+            resto = soma % 11;
+            if (resto < 2)
+                resto = 0;
+            else
+                resto = 11 - resto;
+
+            digito = digito + resto.ToString();
+
+            return cpf.EndsWith(digito);
         }
     }
 }

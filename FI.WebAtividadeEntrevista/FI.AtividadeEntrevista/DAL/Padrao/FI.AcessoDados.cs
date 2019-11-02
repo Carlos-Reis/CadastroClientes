@@ -63,6 +63,11 @@ namespace FI.AtividadeEntrevista.DAL
             {               
                 adapter.Fill(ds);
             }
+            catch
+            {
+                Exception ex = new Exception(message: "CPF já cadastrado");
+                throw ex;
+            }
             finally
             {
                 conexao.Close();
