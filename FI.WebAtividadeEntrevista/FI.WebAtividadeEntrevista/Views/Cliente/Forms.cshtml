@@ -69,6 +69,9 @@
                 <label for="Email">E-mail:</label>
                 <input required="required" type="text" class="form-control" id="Email" name="Email" placeholder="Ex.: email@email.com" maxlength="2079">
             </div>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#BeneficiarioModal">
+                Beneficiários
+            </button>
         </div>
         <div class="col-md-6">
             <div class="form-group">
@@ -87,3 +90,43 @@
         </div>
     </div>
 </form>
+
+<!-- Modal -->
+<div class="modal fade" id="BeneficiarioModal" tabindex="-1" role="dialog" aria-labelledby="BeneficiarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="BeneficiarioModalLabel">Beneficiários</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formCadastroBeneficiario" method="post">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="CPF">CPF:</label>
+                                <input required="required" type="text" class="form-control" id="ModalCPF" name="CPF" placeholder="Ex.: 999.999.999-99" maxlength="14">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="Nome">Nome:</label>
+                                <input required="required" type="text" class="form-control" id="ModalNome" name="Nome" placeholder="Ex.: João da Silva" maxlength="255">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <button id="cadastroBeneficiario" style="margin-top:25px" type="submit" class="btn btn-success">Incluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
