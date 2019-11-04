@@ -1,4 +1,18 @@
 ﻿
+var beneficiarios = [];
+function deletarBeneficiario(id) {    
+    for (beneficiario in beneficiarios) {
+        if (beneficiarios[beneficiario].id == id) {
+            beneficiarios.splice(beneficiario, 1);
+            $("#ben" + id).remove();
+        }
+    }        
+}
+
+function alterarBeneficiario(id) {
+    
+}
+
 $(document).ready(function () {
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
@@ -32,6 +46,48 @@ $(document).ready(function () {
         });
     })
     
+
+    var id = 0;
+    var bk = false;
+    $('#cadastroBeneficiario').click(function () {
+        debugger;
+        var cpf = $('#ModalCPF').val();
+        var name = $('#ModalNome').val();
+
+        for (element of beneficiarios) {
+            if (cpf == element.cpf) {
+                alert("CPF já existente");
+                bk = true;
+                
+            } 
+        }
+
+        if (!bk) {
+
+        $("table td").remove();
+        
+        var beneficiario = {
+            id: id,
+            cpf : cpf,
+            name : name
+        }
+
+        id++;
+        
+        beneficiarios.push(beneficiario);
+        var newRows = "";
+        for (var i = 0; i < beneficiarios.length; i++) {
+            newRows += '<tr id="ben' + beneficiarios[i].id +  '"><td>' + beneficiarios[i].cpf +
+                "</td><td>" + beneficiarios[i].name + '</td><td><button style="'+ 'margin-right:2px;"' + 'class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'alterarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Alterar</button>' + '<button class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'deletarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Deletar</button>' +  '</td></tr>';
+        }
+        $("table tr:first").after(newRows);
+
+        var cpf = $('#ModalCPF').val("");
+        var name = $('#ModalNome').val("");
+        }
+        bk = false;
+    });
+
 })
 
 function ModalDialog(titulo, texto) {
