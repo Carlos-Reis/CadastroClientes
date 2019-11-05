@@ -26,7 +26,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Incluir(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-            
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -40,7 +40,17 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 try
                 {
-                    if (IsCpf(model.CPF))
+                    bool BeneficiarioValido = true;
+
+                    foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
+                    {
+                        if (!IsCpf(beneficiario.CPF))
+                        {
+                            BeneficiarioValido = false;
+                        }
+                    }
+
+                    if (IsCpf(model.CPF) && BeneficiarioValido)
                     {
                         model.Id = bo.Incluir(new Cliente()
                         {
@@ -53,12 +63,12 @@ namespace WebAtividadeEntrevista.Controllers
                             Nome = model.Nome,
                             Sobrenome = model.Sobrenome,
                             CPF = model.CPF,
-                            Telefone = model.Telefone                            
+                            Telefone = model.Telefone
                         });
 
                         BoBeneficiario boBen = new BoBeneficiario();
 
-                        foreach(BeneficiarioModel beneficiario in model.Beneficiarios)
+                        foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
                         {
                             boBen.Incluir(new Beneficiario()
                             {
@@ -87,7 +97,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Alterar(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-       
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -157,7 +167,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = cliente.Telefone
                 };
 
-            
+
             }
 
             return View(model);

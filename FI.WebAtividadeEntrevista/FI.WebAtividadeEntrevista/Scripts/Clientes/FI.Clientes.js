@@ -28,6 +28,13 @@ function alterarBeneficiario(id) {
 //Conexão com o banco para Persistir um novo Cliente
 $(document).ready(function () {
     $('#formCadastro').submit(function (e) {
+        //Remoção de Caracteres Especiais provenientes do uso de mascaras
+        var beneficiariosParse = [];
+        for (beneficiario of beneficiarios) {
+            var parsed = beneficiario;  
+            parsed.cpf = parsed.cpf.replace(/\D/g, "");
+            beneficiariosParse.push(parsed);
+        }
         e.preventDefault();
         $.ajax({
             url: urlPost,
@@ -37,13 +44,13 @@ $(document).ready(function () {
                 "CEP": $(this).find("#CEP").val(),
                 "Email": $(this).find("#Email").val(),
                 "Sobrenome": $(this).find("#Sobrenome").val(),
-                "CPF": $(this).find("#CPF").val(),
+                "CPF": $(this).find("#CPF").val().replace(/\D/g, ""),
                 "Nacionalidade": $(this).find("#Nacionalidade").val(),
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
-                "Beneficiarios": beneficiarios
+                "Beneficiarios": beneficiariosParse
             },
             error:
             function (r) {
@@ -59,7 +66,9 @@ $(document).ready(function () {
             }
         });
     })
-    
+
+    // inicialização mascara cpf
+    $('.cpf').mask('000.000.000-00');
 
     var id = 0;
     var bk = false;

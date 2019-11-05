@@ -1,5 +1,9 @@
 ﻿
 $(document).ready(function () {
+
+    // inicialização mascara cpf
+    $('.cpf').mask('000.000.000-00');
+
     if (obj) {
         $('#formCadastro #Nome').val(obj.Nome);
         $('#formCadastro #CEP').val(obj.CEP);
@@ -46,7 +50,6 @@ $(document).ready(function () {
             }
         });
     })
-    
 })
 
 function ModalDialog(titulo, texto) {
