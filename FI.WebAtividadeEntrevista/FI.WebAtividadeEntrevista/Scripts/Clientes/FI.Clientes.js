@@ -16,7 +16,7 @@ function alterarBeneficiario(id) {
     for (beneficiario in beneficiarios) {
         if (beneficiarios[beneficiario].id == id) {
             $('#ModalCPF').val(beneficiarios[beneficiario].cpf);
-            $('#ModalNome').val(beneficiarios[beneficiario].name);
+            $('#ModalNome').val(beneficiarios[beneficiario].nome);
             $('#cadastroBeneficiario').text('Alterar');
             alterarFunc = true;
             beneficiarioToDelete = id;
@@ -42,7 +42,8 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "Beneficiarios": beneficiarios
             },
             error:
             function (r) {
@@ -69,7 +70,7 @@ $(document).ready(function () {
         }
 
         var cpf = $('#ModalCPF').val();
-        var name = $('#ModalNome').val();
+        var nome = $('#ModalNome').val();
         //Validação de CPF do beneficiario a ser adicionado
         for (element of beneficiarios) {
             if (cpf == element.cpf) {
@@ -85,7 +86,7 @@ $(document).ready(function () {
         var beneficiario = {
             id: id,
             cpf : cpf,
-            name : name
+            nome : nome
         }
 
         id++;
@@ -94,12 +95,12 @@ $(document).ready(function () {
         var newRows = "";
         for (var i = 0; i < beneficiarios.length; i++) {
             newRows += '<tr id="ben' + beneficiarios[i].id +  '"><td>' + beneficiarios[i].cpf +
-                "</td><td>" + beneficiarios[i].name + '</td><td><button id="#alterar' + beneficiarios[i].id + '"style="' + 'margin-right:2px;"' + 'class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'alterarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Alterar</button>' + '<button id="#deletar' + beneficiarios[i].id + '"class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'deletarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Deletar</button>' +  '</td></tr>';
+                "</td><td>" + beneficiarios[i].nome + '</td><td><button id="#alterar' + beneficiarios[i].id + '"style="' + 'margin-right:2px;"' + 'class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'alterarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Alterar</button>' + '<button id="#deletar' + beneficiarios[i].id + '"class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'deletarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Deletar</button>' +  '</td></tr>';
         }
         $("table tr:first").after(newRows);
 
         var cpf = $('#ModalCPF').val("");
-        var name = $('#ModalNome').val("");
+        var nome = $('#ModalNome').val("");
         alterarFunc = false;
         $('#cadastroBeneficiario').text('Salvar');
         }

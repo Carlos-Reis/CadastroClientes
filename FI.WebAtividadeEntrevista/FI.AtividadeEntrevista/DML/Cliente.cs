@@ -65,5 +65,5 @@ namespace FI.AtividadeEntrevista.DML
         /// Telefone
         /// </summary>
         public string Telefone { get; set; }        
-    }    
+    }
 }

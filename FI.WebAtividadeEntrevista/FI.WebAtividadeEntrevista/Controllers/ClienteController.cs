@@ -53,8 +53,20 @@ namespace WebAtividadeEntrevista.Controllers
                             Nome = model.Nome,
                             Sobrenome = model.Sobrenome,
                             CPF = model.CPF,
-                            Telefone = model.Telefone
+                            Telefone = model.Telefone                            
                         });
+
+                        BoBeneficiario boBen = new BoBeneficiario();
+
+                        foreach(BeneficiarioModel beneficiario in model.Beneficiarios)
+                        {
+                            boBen.Incluir(new Beneficiario()
+                            {
+                                CPF = beneficiario.CPF,
+                                Nome = beneficiario.Nome,
+                                IdCliente = model.Id
+                            });
+                        }
                     }
                     else
                         throw new Exception("CPF Inválido");

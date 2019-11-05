@@ -63,9 +63,17 @@ namespace FI.AtividadeEntrevista.DAL
             {               
                 adapter.Fill(ds);
             }
-            catch
+            catch(Exception e)
             {
-                Exception ex = new Exception(message: "CPF já cadastrado");
+                Exception ex = new Exception();
+                if (e.Message.Contains("Could not find stored procedure"))
+                {
+                    ex = new Exception(message: "Ocorreu um erro interno.");
+                }
+                else
+                {
+                    ex = new Exception(message: "CPF já cadastrado");
+                }
                 throw ex;
             }
             finally
