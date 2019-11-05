@@ -9,10 +9,23 @@ function deletarBeneficiario(id) {
     }        
 }
 
+var alterarFunc = false;
+var beneficiarioToDelete = 0;
+
 function alterarBeneficiario(id) {
+    for (beneficiario in beneficiarios) {
+        if (beneficiarios[beneficiario].id == id) {
+            $('#ModalCPF').val(beneficiarios[beneficiario].cpf);
+            $('#ModalNome').val(beneficiarios[beneficiario].name);
+            $('#cadastroBeneficiario').text('Alterar');
+            alterarFunc = true;
+            beneficiarioToDelete = id;
+        }
+    }
     
 }
 
+//Conexão com o banco para Persistir um novo Cliente
 $(document).ready(function () {
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
@@ -50,10 +63,14 @@ $(document).ready(function () {
     var id = 0;
     var bk = false;
     $('#cadastroBeneficiario').click(function () {
-        debugger;
+        // Validação se a função foi chamada para alterar ou adicionar um beneficiario
+        if (alterarFunc) {
+            deletarBeneficiario(beneficiarioToDelete);
+        }
+
         var cpf = $('#ModalCPF').val();
         var name = $('#ModalNome').val();
-
+        //Validação de CPF do beneficiario a ser adicionado
         for (element of beneficiarios) {
             if (cpf == element.cpf) {
                 alert("CPF já existente");
@@ -63,7 +80,6 @@ $(document).ready(function () {
         }
 
         if (!bk) {
-
         $("table td").remove();
         
         var beneficiario = {
@@ -73,19 +89,21 @@ $(document).ready(function () {
         }
 
         id++;
-        
+        // Criação da Tabela  de Beneficiarios
         beneficiarios.push(beneficiario);
         var newRows = "";
         for (var i = 0; i < beneficiarios.length; i++) {
             newRows += '<tr id="ben' + beneficiarios[i].id +  '"><td>' + beneficiarios[i].cpf +
-                "</td><td>" + beneficiarios[i].name + '</td><td><button style="'+ 'margin-right:2px;"' + 'class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'alterarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Alterar</button>' + '<button class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'deletarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Deletar</button>' +  '</td></tr>';
+                "</td><td>" + beneficiarios[i].name + '</td><td><button id="#alterar' + beneficiarios[i].id + '"style="' + 'margin-right:2px;"' + 'class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'alterarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Alterar</button>' + '<button id="#deletar' + beneficiarios[i].id + '"class="' + 'btn btn-sm btn-primary"' + 'onclick="' + 'deletarBeneficiario(' + beneficiarios[i].id + ' )"' + '>Deletar</button>' +  '</td></tr>';
         }
         $("table tr:first").after(newRows);
 
         var cpf = $('#ModalCPF').val("");
         var name = $('#ModalNome').val("");
+        alterarFunc = false;
+        $('#cadastroBeneficiario').text('Salvar');
         }
-        bk = false;
+        bk = false;        
     });
 
 })
