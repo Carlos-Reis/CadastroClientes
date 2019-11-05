@@ -33,16 +33,16 @@ namespace FI.AtividadeEntrevista.BLL
         /// </summary>
         /// <param name="id">id do beneficiario</param>
         /// <returns></returns>
-        public DML.Beneficiario Consultar(long id)
+        public List<DML.Beneficiario> Consultar(long id)
         {
             DAL.DaoBeneficiario cli = new DAL.DaoBeneficiario();
             return cli.Consultar(id);
         }
 
         /// <summary>
-        /// Excluir o beneficiario pelo id
+        /// Excluir os beneficiarios pelo id do cliente
         /// </summary>
-        /// <param name="id">id do beneficiario</param>
+        /// <param name="id">id do cliente</param>
         /// <returns></returns>
         public void Excluir(long id)
         {

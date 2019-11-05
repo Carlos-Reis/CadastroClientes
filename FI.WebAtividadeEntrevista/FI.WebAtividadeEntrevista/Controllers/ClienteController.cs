@@ -42,14 +42,16 @@ namespace WebAtividadeEntrevista.Controllers
                 {
                     bool BeneficiarioValido = true;
 
-                    foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
+                    if (!(model.Beneficiarios == null))
                     {
-                        if (!IsCpf(beneficiario.CPF))
+                        foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
                         {
-                            BeneficiarioValido = false;
+                            if (!IsCpf(beneficiario.CPF))
+                            {
+                                BeneficiarioValido = false;
+                            }
                         }
                     }
-
                     if (IsCpf(model.CPF) && BeneficiarioValido)
                     {
                         model.Id = bo.Incluir(new Cliente()
@@ -66,16 +68,19 @@ namespace WebAtividadeEntrevista.Controllers
                             Telefone = model.Telefone
                         });
 
-                        BoBeneficiario boBen = new BoBeneficiario();
-
-                        foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
+                        if (!(model.Beneficiarios == null))
                         {
-                            boBen.Incluir(new Beneficiario()
+                            BoBeneficiario boBen = new BoBeneficiario();
+
+                            foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
                             {
-                                CPF = beneficiario.CPF,
-                                Nome = beneficiario.Nome,
-                                IdCliente = model.Id
-                            });
+                                boBen.Incluir(new Beneficiario()
+                                {
+                                    CPF = beneficiario.CPF,
+                                    Nome = beneficiario.Nome,
+                                    IdCliente = model.Id
+                                });
+                            }
                         }
                     }
                     else
@@ -111,7 +116,19 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 try
                 {
-                    if (IsCpf(model.CPF))
+                    bool BeneficiarioValido = true;
+
+                    if (!(model.Beneficiarios == null))
+                    {
+                        foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
+                        {
+                            if (!IsCpf(beneficiario.CPF))
+                            {
+                                BeneficiarioValido = false;
+                            }
+                        }
+                    }
+                    if (IsCpf(model.CPF) && BeneficiarioValido)
                     {
                         bo.Alterar(new Cliente()
                         {
@@ -127,6 +144,21 @@ namespace WebAtividadeEntrevista.Controllers
                             CPF = model.CPF,
                             Telefone = model.Telefone
                         });
+
+                        BoBeneficiario boBen = new BoBeneficiario();
+                        boBen.Excluir(model.Id);
+                        if (!(model.Beneficiarios == null))
+                        {
+                            foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
+                            {
+                                boBen.Incluir(new Beneficiario()
+                                {
+                                    CPF = beneficiario.CPF,
+                                    Nome = beneficiario.Nome,
+                                    IdCliente = model.Id
+                                });
+                            }
+                        }
                     }
                     else
                         throw new Exception("CPF Inválido");
@@ -150,6 +182,25 @@ namespace WebAtividadeEntrevista.Controllers
             Cliente cliente = bo.Consultar(id);
             Models.ClienteModel model = null;
 
+            BoBeneficiario boBen = new BoBeneficiario();
+            List<Beneficiario> beneficiarios = boBen.Consultar(id);
+            List<BeneficiarioModel> benModels = new List<BeneficiarioModel>();
+            if (beneficiarios != null)
+            {
+                foreach (var beneficiario in beneficiarios)
+                {
+                    if (!(beneficiario == null))
+                    {
+                        var benModel = new BeneficiarioModel()
+                        {
+                            CPF = beneficiario.CPF,
+                            Nome = beneficiario.Nome
+                        };
+                        benModels.Add(benModel);
+                    }
+                }
+            }
+
             if (cliente != null)
             {
                 model = new ClienteModel()
@@ -164,9 +215,9 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
                     CPF = cliente.CPF,
-                    Telefone = cliente.Telefone
+                    Telefone = cliente.Telefone,
+                    Beneficiarios = benModels
                 };
-
 
             }
 

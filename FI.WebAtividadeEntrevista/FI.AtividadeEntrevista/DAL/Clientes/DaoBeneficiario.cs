@@ -36,16 +36,15 @@ namespace FI.AtividadeEntrevista.DAL
         /// Inclui um novo beneficiario
         /// </summary>
         /// <param name="beneficiario">Objeto de beneficiario</param>
-        internal DML.Beneficiario Consultar(long Id)
+        internal List<DML.Beneficiario> Consultar(long Id)
         {
             List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
-
             parametros.Add(new System.Data.SqlClient.SqlParameter("Id", Id));
 
             DataSet ds = base.Consultar("FI_SP_ConsBeneficiario", parametros);
             List<DML.Beneficiario> cli = Converter(ds);
 
-            return cli.FirstOrDefault();
+            return cli;
         }
 
         internal bool VerificarExistencia(string CPF)
@@ -114,14 +113,14 @@ namespace FI.AtividadeEntrevista.DAL
 
 
         /// <summary>
-        /// Excluir Beneficiario
+        /// Excluir Beneficiarios
         /// </summary>
         /// <param name="beneficiario">Objeto de beneficiario</param>
         internal void Excluir(long Id)
         {
             List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
 
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Id", Id));
+            parametros.Add(new System.Data.SqlClient.SqlParameter("IdCliente", Id));
 
             base.Executar("FI_SP_DelBeneficiario", parametros);
         }
@@ -134,10 +133,8 @@ namespace FI.AtividadeEntrevista.DAL
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     DML.Beneficiario cli = new DML.Beneficiario();
-                    cli.Id = row.Field<long>("Id");
                     cli.Nome = row.Field<string>("Nome");
                     cli.CPF = row.Field<string>("CPF");
-                    cli.IdCliente = row.Field<long>("IdCliente");
                     lista.Add(cli);
                 }
             }
